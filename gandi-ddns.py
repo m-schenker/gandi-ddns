@@ -37,7 +37,7 @@ def main():
             ttl = config[fqdn]['ttl']
         except Exception:
             print("Config file is missing parameters in section '" + fqdn + "'. Skipping this section ...")
-            break
+            continue
 
         # check for a single domain's record, by name and type
         exists = requests.get(API + "/domains/" + fqdn + "/records/" + aname + "/" + "A",
@@ -52,7 +52,7 @@ def main():
             print(new.status_code)
             if new.status_code != 200:
                 print("Failed to update A record for " + aname + "." + fqdn + ". Skipping this section ...")
-                break;
+                continue
 
         # if record already exists check if ip and ttl are correct
         if exists.status_code == 200:
@@ -67,18 +67,17 @@ def main():
                                        headers={"Authorization": "Apikey " + apikey})
                 if replace.status_code == 201:
                     print("Creating record for " + aname + "." + fqdn + " was successful.")
-                    break
+                    continue
                 else:
                     print("Creating record for " + aname + "." + fqdn + " failed with error code " + str(
                         replace.status_code))
-                    break
+                    continue
             else:
                 print("Parameters of the record for " + aname + "." + fqdn + " are up-to-date. Nothing to do.")
-                break
+                continue
         # handle case if name/type pair did exist, but could not be changed
         print("Failed to update A record for " + aname + "." + fqdn + ". With error code " + str(exists.status_code)
               + ".")
-        break;
 
 
 if __name__ == '__main__':
