@@ -78,7 +78,6 @@ def main():
         # handle case if name/type pair did exist, but could not be changed
         print("Failed to update A record for " + aname + "." + fqdn + ". With error code " + str(exists.status_code)
               + ".")
-        continue
 
 
 if __name__ == '__main__':
